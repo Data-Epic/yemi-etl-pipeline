@@ -1,0 +1,18 @@
+# Ignore node_modules folder
+src/__pycache__/
+tests/__pycache__/
+
+# Ignore environment variable files
+src/.env
+
+# Ignore desktop.ini file
+desktop.ini
+
+# Ignore venv
+venv/
+
+# Ignore pics
+erd.png
+schema.png
+
+.pytest_cache/
