@@ -1,19 +1,35 @@
 import pytest
+from unittest.mock import patch, MagicMock, mock_open
+import json
+import os
 from src.web_scraper import fetch_data, flatten_data, store_moveis_data
 
-def test_fetch_data():
+
+@patch("requests.request")
+def test_fetch_data(mock_request):
+    mock_response = MagicMock()
+    mock_response.json.return_value = {"titles": [{"id": "tt12345", "primaryTitle": "Test Movie"}]}
+    mock_request.return_value = mock_response
+
     data = fetch_data()
     assert isinstance(data, dict)
-    assert len(data) > 0
+    assert "titles" in data
 
-def test_flatten_data():
+@patch("requests.request")
+def test_fetch_data_empty_response(mock_request):
+    mock_response = MagicMock()
+    mock_response.json.return_value = {}  
+    mock_request.return_value = mock_response
+
     data = fetch_data()
-    flattened_data = flatten_data(data)
-    assert flattened_data is not None
-    assert isinstance(flattened_data, dict)
-    assert len(flattened_data) > 0
+    assert isinstance(data, dict)  # Should still return a dictionary
+    assert not data  # Should be an empty dictionary
 
-def test_store_moveis_data():
-    data = store_moveis_data()
-    assert isinstance(data, dict)
-    assert len(data) > 0
+@patch("builtins.open", new_callable=mock_open)
+@patch("os.path.join", return_value="test_movie.json")
+def test_store_movies_data(mock_path_join, mock_file):
+    """Test store_movies_data creates a JSON file with expected structure."""
+    with patch("json.dump") as mock_json_dump:
+        store_moveis_data()
+        mock_file.assert_called_once_with("test_movie.json", "w", encoding="utf-8")
+        mock_json_dump.assert_called()

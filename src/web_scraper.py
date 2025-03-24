@@ -56,7 +56,7 @@ def flatten_data(movie_data):
                         {
                             "id": movie["id"],
                             "company_id": company["id"],
-                            "company_name": company["name"],
+                            "company_name": company["name"]
                         }
                     )
                 if movie.get("genres"):
@@ -65,7 +65,7 @@ def flatten_data(movie_data):
     return {
         "movies": movies,
         "production_companies": production_companies,
-        "genres": genres,
+        "genres": genres
     }
 
 
