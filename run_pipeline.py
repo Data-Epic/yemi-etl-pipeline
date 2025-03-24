@@ -16,7 +16,6 @@ def main():
     logging.info("Starting the ETL process")
     try:
         # Fetch data from rapid api and extract important information
-        logging.info("Web-scraper is running......")
         logging.info("Fetching data from RapidAPI......")
         data = fetch_data()
         logging.info(f"Scraped/Fetched {len(data)} records")
@@ -27,7 +26,6 @@ def main():
         logging.info("Data stored successfully")
 
         # Transform the data with polars, remove null values, and convert data types, and drop duplicates for ids
-        logging.info("data-transformer is runninng......")
         logging.info("Transforming the data.....")
         transformed_data = transfrom_data()
         logging.info("Data transformed successfully")
@@ -36,16 +34,16 @@ def main():
 
         # Load the data into movies database
         logging.info("db-loader is running......")
-        logging.info("Loading the data into the database.......")
         db = Database()
         db.add_data()
         logging.info("Data loaded successfully")
         db.close()
         logging.info("Database connection closed")
+
+        logging.info("ETL process completed successfully")
     except Exception as e:
         logging.error(f"An error occurred: {e}")
 
 
 if __name__ == "__main__":
     main()
-    logging.info("ETL process completed successfully")
