@@ -8,22 +8,26 @@ from src.web_scraper import fetch_data, flatten_data, store_moveis_data
 @patch("requests.request")
 def test_fetch_data(mock_request):
     mock_response = MagicMock()
-    mock_response.json.return_value = {"titles": [{"id": "tt12345", "primaryTitle": "Test Movie"}]}
+    mock_response.json.return_value = {
+        "titles": [{"id": "tt12345", "primaryTitle": "Test Movie"}]
+    }
     mock_request.return_value = mock_response
 
     data = fetch_data()
     assert isinstance(data, dict)
     assert "titles" in data
 
+
 @patch("requests.request")
 def test_fetch_data_empty_response(mock_request):
     mock_response = MagicMock()
-    mock_response.json.return_value = {}  
+    mock_response.json.return_value = {}
     mock_request.return_value = mock_response
 
     data = fetch_data()
     assert isinstance(data, dict)  # Should still return a dictionary
     assert not data  # Should be an empty dictionary
+
 
 @patch("builtins.open", new_callable=mock_open)
 @patch("os.path.join", return_value="test_movie.json")
